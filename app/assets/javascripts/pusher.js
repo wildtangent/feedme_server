@@ -11,19 +11,17 @@ $(function(){
   var key = 'ea07c05121b1307db556';
   var topic = "default";
   var eventName = "alert";
+  
   var listElement = $("ul#notifications");
+  var listLinks = $("ul#notifications li a");
   var pageElement = $("#current_page iframe");
+
 
   // Configure Pusher
   var pusher = new Pusher(key);
   var channel = pusher.subscribe(topic);
-  
-  $("ul#notifications li a").live("click", function(e){
-    e.preventDefault();
-    pageElement.attr("src", $(this).attr("href"));
-  })
 
-  // Bind event callback
+  // Bind Pusher event callback
   channel.bind(eventName, function(data) {
     var tag = $("<li>");
     var link = $("<a>");
@@ -34,5 +32,11 @@ $(function(){
     
     pageElement.attr("src", data.url);
   });
+  
+  // Configure sidebar link click behaviour
+  listLinks.live("click", function(e){
+    e.preventDefault();
+    pageElement.attr("src", $(this).attr("href"));
+  })  
   
 });
